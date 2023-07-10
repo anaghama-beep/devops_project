@@ -38,6 +38,7 @@ const insertUser = async(req,res)=>{
             email:req.body.email,
             section:req.body.section,
             usn:req.body.usn,
+            isAdmin:true //amshu change this when you add admin functionality , always true
             pass:spass
         }
        
@@ -61,6 +62,7 @@ const verifyLogin = async(req,res)=>{
         const pass = req.body.pass;
         const UserData = await userModel.findOne({email:email});
         if(UserData){
+
            const match =  await bcrypt.compare(pass,UserData.pass);
             if(match){
                 req.session.user_id= UserData._id;
@@ -72,7 +74,7 @@ const verifyLogin = async(req,res)=>{
             }
        }
         else {
-            res.render('index',{message:"password or email is incorrect"});
+            res.render('index',{message:"user not found , please sign up"});
         }
     } catch (error) {
         console.log(error);
